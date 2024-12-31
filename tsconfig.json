@@ -26,7 +26,6 @@
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true
   },
   "include": ["src", "src/svg.d.ts"]
 }

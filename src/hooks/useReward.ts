@@ -1,24 +1,25 @@
-import { useCallback, useState, useEffect } from 'react';
+import { type MutableRefObject, useCallback, useState } from 'react';
 import { confetti } from '../components/Confetti/Confetti';
 import { emoji } from '../components/Emoji/Emoji';
 import { balloons } from '../components/Balloons/Balloons';
 import { UseRewardType } from './useReward.types';
-import { getContainerById } from '../functions/helpers';
 
-export const useReward: UseRewardType = (id, type, config) => {
+export const useReward: UseRewardType = (
+  ref: MutableRefObject<HTMLElement | null>,
+  type,
+  config
+) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+
   const internalAnimatingCallback = () => {
     setIsAnimating(false);
   };
-
   const reward = useCallback(() => {
-    if (!isMounted) return;
-    const foundContainer = getContainerById(id);
-    if (!foundContainer) return;
+    const foundContainer = ref?.current;
+    if (!foundContainer) {
+      console.error('The provided ref does not point to a valid DOM element.');
+      return;
+    }
     setIsAnimating(true);
     switch (type) {
       case 'confetti':
@@ -33,7 +34,7 @@ export const useReward: UseRewardType = (id, type, config) => {
       default:
         console.error(`${type} is not a valid react-rewards type.`);
     }
-  }, [config, id, type, isMounted]);
+  }, [config, ref, type]);
 
   return { reward, isAnimating };
 };
