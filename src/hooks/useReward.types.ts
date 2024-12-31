@@ -16,7 +16,7 @@ export type RewardFunction = {
 };
 
 export type UseRewardType = <T extends RewardType>(
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement | null>,
   type: T,
   config?: RewardConfigs[T]
 ) => RewardFunction;
