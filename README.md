@@ -31,7 +31,7 @@ You can read more on the subject of micro-interactions in my blog post – https
 
 ## Installation
 
-Install from npm by typing ```npm install react-rewards``` or ```yarn add react-rewards``` while in your package.json directory.
+Install from npm by typing ```npm install react-rewards``` or ```pnpm add react-rewards``` while in your package.json directory.
 
 ## Usage
 

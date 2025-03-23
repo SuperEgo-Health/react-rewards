@@ -1,25 +1,50 @@
-import dts from 'rollup-plugin-dts'
-import esbuild from 'rollup-plugin-esbuild'
+import dts from 'rollup-plugin-dts';
+import esbuild from 'rollup-plugin-esbuild';
 import svg from 'rollup-plugin-svg';
+import pkg from './package.json' with { type: 'json' }; // Import package.json as a JSON module
 
-const name = require('./package.json').main.replace(/\.js$/, '')
+// Get the base name for the output files from package.json
+const baseName = pkg.main.replace(/\.js$/, '');
 
-const ext = format =>
-    format === 'dts' ? 'd.ts' : format === 'cjs' ? 'js' : 'es.js'
+// Helper function to determine file extensions based on format
+const getExtension = (format) => {
+  switch (format) {
+    case 'dts':
+      return 'd.ts';
+    case 'cjs':
+      return 'js';
+    default:
+      return 'es.js';
+  }
+};
 
-const bundle = format => ({
-  input: 'src/index.ts',
+// Function to create a Rollup bundle configuration
+const createBundle = (format) => ({
+  input: 'src/index.ts', // Entry point
   output: {
-    file: `${name}.${ext(format)}`,
-    format: format === 'cjs' ? 'cjs' : 'es',
-    sourcemap: format !== 'dts',
+    file: `${baseName}.${getExtension(format)}`,
+    format: format === 'cjs' ? 'cjs' : 'es', // CommonJS or ES Module
+    sourcemap: format !== 'dts', // Generate sourcemaps for JS builds
   },
-  plugins: format === 'dts' ? [dts()] : [svg(), esbuild({minify: true})],
-  external: id => !/^[./]/.test(id),
-})
+  plugins: format === 'dts'
+    ? [dts()] // Use the dts plugin for TypeScript declaration files
+    : [
+        svg(), // Handle SVG imports
+        esbuild({
+          minify: true, // Minify the output
+          target: 'es2018', // Target modern JavaScript
+        }),
+      ],
+  external: (id) => {
+    // Exclude dependencies from the bundle
+    // Externalize anything that is not a relative or absolute path
+    return !id.startsWith('.') && !id.startsWith('/');
+  },
+});
 
+// Export the bundle configurations
 export default [
-  bundle('es'),
-  bundle('cjs'),
-  bundle('dts'),
-]
+  createBundle('es'), // ES Module build
+  createBundle('cjs'), // CommonJS build
+  createBundle('dts'), // TypeScript declaration build
+];
