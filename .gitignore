@@ -5,7 +5,7 @@ node_modules
 # Yarn Integrity file
 .yarn-integrity
 
-dist
+# dist
 
 # Logs
 logs

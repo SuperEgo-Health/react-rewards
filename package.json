@@ -30,7 +30,6 @@
     "watch": "rollup -c -w",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "prepublish": "rm -rf dist && NODE_ENV=production npm run build"
   },
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
