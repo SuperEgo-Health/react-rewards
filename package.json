@@ -4,6 +4,7 @@
   "description": "This package lets you easily add micro-interactions to your app and reward users with the rain of confetti, emoji or balloons.",
   "author": "thedevelobear",
   "license": "MIT",
+  "type": "module",
   "main": "dist/react-rewards.js",
   "jsnext:main": "dist/react-rewards.es.js",
   "module": "dist/react-rewards.es.js",
